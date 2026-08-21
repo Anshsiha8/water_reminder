@@ -102,7 +102,12 @@ function App() {
         setState(fresh);
         const { error: insertError } = await supabase
           .from('hydromind_demo_state')
-          .insert({ user_id: userId, state: fresh, updated_at: new Date().toISOString() });
+          .insert({
+  id: userId,
+  user_id: userId,
+  state: fresh,
+  updated_at: new Date().toISOString()
+});
         if (insertError) console.error('Failed to create initial Hydrank state:', insertError.message);
       }
       setLoaded(true);
@@ -117,7 +122,15 @@ function App() {
       if (supabase) {
         const { error } = await supabase
           .from('hydromind_demo_state')
-          .upsert({ user_id: userId, state, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
+          .upsert(
+  {
+    id: userId,
+    user_id: userId,
+    state,
+    updated_at: new Date().toISOString()
+  },
+  { onConflict: 'user_id' }
+);
         if (error) console.error('Failed to save Hydrank state:', error.message);
       }
       setSaving(false);
